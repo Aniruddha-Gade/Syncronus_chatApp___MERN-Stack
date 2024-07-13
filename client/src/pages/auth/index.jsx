@@ -3,9 +3,10 @@ import victoryEmoji from '@/assets/victory.svg'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { apiClient } from '@/lib/api-client'
-import { SIGNUP_ROUTE } from '@/utils/constants'
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@/utils/constants'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const Auth = () => {
@@ -13,6 +14,7 @@ const Auth = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const navigate = useNavigate()
 
   const validateSignup = () => {
     if (!email.length) {
@@ -29,13 +31,41 @@ const Auth = () => {
     }
     return true;
   }
+  const validateLogin = () => {
+    if (!email.length) {
+      toast.error("Email is required")
+      return false
+    }
+    if (!password.length) {
+      toast.error("Password is required")
+      return false
+    }
+    return true;
+  }
 
   const handleLogin = async () => {
+    if (validateLogin()) {
+      const response = await apiClient.post(LOGIN_ROUTE,
+        { email, password },
+        { withCredentials: true } // to receive cookie
+      )
+      console.log("LOGIN_API_RESPONSE => ", response)
+
+      if (response.data.user?._id) {
+        if (response.user?.profileSetup) {
+          navigate("/chat")
+        }
+        else navigate("/profile")
+      }
+    }
 
   }
   const handleSignup = async () => {
     if (validateSignup()) {
-      const response = await apiClient.post(SIGNUP_ROUTE, { email, password })
+      const response = await apiClient.post(SIGNUP_ROUTE,
+        { email, password },
+        { withCredentials: true } // to receive cookie
+      )
       console.log("SIGNUP_API_RESPONSE => ", response)
     }
   }
@@ -58,7 +88,7 @@ const Auth = () => {
 
           {/* Tabs - login/signup */}
           <div className='flex-center w-full '>
-            <Tabs className='w-3/4'>
+            <Tabs className='w-3/4' defaultValue='login'>
               <TabsList className='bg-transparent w-full rounded-none   '>
                 <div className='flex '>
                   <TabsTrigger value="login"

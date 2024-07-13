@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js'
+import { compare } from 'bcrypt';
 
 
 const tokenExpireTime = 3 * 24 * 60 * 60 * 1000
@@ -42,7 +43,7 @@ export const signup = async (req, res, next) => {
         res.cookie("jwt", createToken(email, password), {
             tokenExpireTime,
             secure: true,
-            sameSite: 'none'
+            sameSite: 'None'
         })
 
         // return success message
@@ -60,6 +61,65 @@ export const signup = async (req, res, next) => {
         console.log("Error while creating user data => ", error)
         res.status(401).json({
             message: 'Error while creating user data',
+            error: error.message
+        })
+    }
+}
+
+
+
+// ====================== LOGIN ======================
+export const login = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required..!'
+            });
+        }
+
+        // find user
+        const user = await User.findOne({ email });
+
+        // if not found ,then say to register
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User is not registered'
+            });
+        }
+
+        // check password
+        const checkPassword = await compare(password, user.password)
+        if (!checkPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password is incorrect'
+            });
+        }
+
+        // set cookies
+        res.cookie("jwt", createToken(email, password), {
+            tokenExpireTime,
+            secure: true,
+            sameSite: 'None'
+        })
+
+        // erase password from user object , not from database
+        user.password = undefined
+
+        // return success message
+        return res.status(200).json({
+            user,
+            success: true,
+            message: 'User logged Successfully'
+        });
+
+    } catch (error) {
+        console.log("Error while loging user => ", error)
+        res.status(401).json({
+            message: 'Error while loging user',
             error: error.message
         })
     }
