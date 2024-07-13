@@ -4,6 +4,7 @@ import dontenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import connectDB from './config/database.js';
+import authRoutes from './routes/AuthRoutes.js';
 
 dontenv.config() 
 
@@ -32,6 +33,9 @@ const server = app.listen(PORT, () => {
 // connect Database
 connectDB()
 
+
+// mount routes
+app.use('/api/auth', authRoutes)
 
 
 // Default Route

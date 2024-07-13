@@ -2,8 +2,11 @@
 import victoryEmoji from '@/assets/victory.svg'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { apiClient } from '@/lib/api-client'
+import { SIGNUP_ROUTE } from '@/utils/constants'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 const Auth = () => {
 
@@ -11,12 +14,30 @@ const Auth = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
+  const validateSignup = () => {
+    if (!email.length) {
+      toast.error("Email is required")
+      return false
+    }
+    if (!password.length) {
+      toast.error("Password is required")
+      return false
+    }
+    if (password !== confirmPassword) {
+      toast.error("Password & Confirm Password should be same")
+      return false
+    }
+    return true;
+  }
 
   const handleLogin = async () => {
 
   }
   const handleSignup = async () => {
-
+    if (validateSignup()) {
+      const response = await apiClient.post(SIGNUP_ROUTE, { email, password })
+      console.log("SIGNUP_API_RESPONSE => ", response)
+    }
   }
 
 
@@ -40,19 +61,19 @@ const Auth = () => {
             <Tabs className='w-3/4'>
               <TabsList className='bg-transparent w-full rounded-none   '>
                 <div className='flex '>
-                <TabsTrigger value="login"
-                  className='data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300'
-                >
-                  login
-                </TabsTrigger>
-                <TabsTrigger value="signup"
-                  className='data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300'
-                >
-                  Signup
-                </TabsTrigger>
+                  <TabsTrigger value="login"
+                    className='data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300'
+                  >
+                    login
+                  </TabsTrigger>
+                  <TabsTrigger value="signup"
+                    className='data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300'
+                  >
+                    Signup
+                  </TabsTrigger>
                 </div>
 
-               {/* login content */}
+                {/* login content */}
                 <TabsContent className='flex flex-col gap-5 mt-10' value='login'  >
                   <Input
                     type='email'
@@ -72,8 +93,8 @@ const Auth = () => {
                     Login
                   </Button>
                 </TabsContent>
-               
-               {/* signup content */}
+
+                {/* signup content */}
                 <TabsContent className='flex flex-col gap-5 ' value='signup'>
                   <Input
                     type='email'
