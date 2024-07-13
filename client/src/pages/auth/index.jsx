@@ -3,6 +3,7 @@ import victoryEmoji from '@/assets/victory.svg'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { apiClient } from '@/lib/api-client'
+import { useAppStore } from '@/store'
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@/utils/constants'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs'
 import { useState } from 'react'
@@ -15,6 +16,7 @@ const Auth = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const navigate = useNavigate()
+  const { setUserInfo } = useAppStore()
 
   const validateSignup = () => {
     if (!email.length) {
@@ -52,6 +54,7 @@ const Auth = () => {
       console.log("LOGIN_API_RESPONSE => ", response)
 
       if (response.data.user?._id) {
+        setUserInfo(response.data.user)
         if (response.user?.profileSetup) {
           navigate("/chat")
         }
@@ -67,6 +70,10 @@ const Auth = () => {
         { withCredentials: true } // to receive cookie
       )
       console.log("SIGNUP_API_RESPONSE => ", response)
+      if (response.data.success) {
+        setUserInfo(response.data.user)
+        navigate("/profile")
+      }
     }
   }
 
