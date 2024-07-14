@@ -136,7 +136,7 @@ export const getUserInfo = async (req, res, next) => {
             console.log('userId not found')
             return res.status(400).json({
                 success: false,
-                message: 'userId not found with given ID'
+                message: 'userId not found'
             });
         }
 
@@ -171,3 +171,67 @@ export const getUserInfo = async (req, res, next) => {
     }
 }
 
+
+
+
+// ====================== UPDATE PROFILE ======================
+export const updateProfile = async (req, res, next) => {
+    try {
+        const userId = req.userId;
+        const { firstName, lastName, image, color } = req.body
+        console.log("Have to update this values ==> ")
+        console.log({ firstName, lastName, image, color, userId })
+
+
+        if (!userId) {
+            console.log('userId not found')
+            return res.status(400).json({
+                success: false,
+                message: 'userId not found'
+            });
+        }
+
+        if (!firstName || !lastName) {
+            console.log('First name , last name , color is required')
+            return res.status(400).json({
+                success: false,
+                message: 'First name , last name , color is required'
+            });
+        }
+
+        // find user
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                firstName, lastName, image, color, profileSetup: true
+            },
+            { new: true, runvalidators: true }
+        );
+        console.log("updated User-info = ", updatedUser)
+
+        // if not found
+        if (!updatedUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // erase password from user object , not from database
+        updatedUser.password = undefined
+
+        // return success message
+        return res.status(200).json({
+            user: updatedUser,
+            success: true,
+            message: 'User-info updated Successfully'
+        });
+
+    } catch (error) {
+        console.log("Error while updating user-info => ", error)
+        res.status(500).json({
+            message: 'Error while updating user-info',
+            error: error.message
+        })
+    }
+}

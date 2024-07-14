@@ -31,7 +31,6 @@ function App() {
   // get user data
   useEffect(() => {
     const getUserData = async () => {
-      alert("hrlo")
       setLoading(true)
       console.log("userInfo from apppp = ", userInfo)
       try {
