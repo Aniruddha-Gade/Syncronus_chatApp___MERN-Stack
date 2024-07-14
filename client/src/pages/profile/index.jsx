@@ -56,13 +56,22 @@ const Profile = () => {
     }
   }
 
+
+  const handleProfileBackNavigation = () => {
+    if (userInfo.profileSetup) {
+      navigate("/chat")
+    } else {
+      toast.error("Please setup profile")
+    }
+  }
+
   // console.log("userInfo from 'profile-page' => ", userInfo)
 
   return (
     <div className="bg-[#1b1c24] h-screen flex-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max ">
-        <div>
-          <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer " />
+        <div onClick={handleProfileBackNavigation}>
+          <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer hover:scale-110 duration-300" />
         </div>
         <div className="grid grid-cols-2 ">
           <div
