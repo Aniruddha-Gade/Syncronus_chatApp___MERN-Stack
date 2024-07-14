@@ -55,6 +55,8 @@ const Auth = () => {
 
       if (response.data.user?._id) {
         setUserInfo(response.data.user)
+        localStorage.setItem("userInfo", JSON.stringify(response.data?.user));
+
         if (response.user?.profileSetup) {
           navigate("/chat")
         }
@@ -71,6 +73,7 @@ const Auth = () => {
       )
       console.log("SIGNUP_API_RESPONSE => ", response)
       if (response.data.success) {
+        localStorage.setItem("userInfo", JSON.stringify(response.data?.user));
         setUserInfo(response.data.user)
         navigate("/profile")
       }
