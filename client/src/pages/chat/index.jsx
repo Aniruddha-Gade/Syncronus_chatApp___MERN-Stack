@@ -16,15 +16,15 @@ const Chat = () => {
     if (!userInfo.profileSetup) {
       toast("Please setup profile to continue...")
       navigate("/profile")
-    }1
+    } 1
   }, [userInfo, navigate])
 
 
   return (
-    <div className="overflow-hidden h-screen flex border-t-yellow-950">
-      <ContactsContainer/>
+    <div className="text-white overflow-hidden h-screen flex border-t-yellow-950">
+      <ContactsContainer />
       {/* <EmptyChatContainer/> */}
-      <ChatContainer/>
+      <ChatContainer />
     </div>
   )
 }
