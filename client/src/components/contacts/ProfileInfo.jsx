@@ -6,11 +6,34 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { FiEdit2 } from 'react-icons/fi'
 import { useNavigate } from "react-router-dom"
 import { IoPowerSharp } from "react-icons/io5"
+import { apiClient } from "@/lib/api-client"
+import { LOGOUT_ROUTE } from "@/utils/constants"
 
 const ProfileInfo = () => {
 
-  const { userInfo } = useAppStore()
+  const { userInfo, setUserInfo } = useAppStore()
   const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      const response = await apiClient.post(LOGOUT_ROUTE, {},
+        { withCredentials: true }
+      )
+      console.log("LOGOUT_ROUTE API RESPONSE => ", response)
+
+      if (response.data.success) {
+        // clear userinfo from store
+        setUserInfo(null)
+
+        // clear local storage
+        localStorage.setItem("userInfo", '')
+      }
+
+
+    } catch (error) {
+      console.log("", error)
+    }
+  }
 
   return (
     <div className="absolute bottom-0 h-16 flex-between px-2 w-full bg-[#2a2b33]">
@@ -59,7 +82,7 @@ const ProfileInfo = () => {
         {/* logout button */}
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger onClick={handleLogout}>
               <IoPowerSharp className="text-purple-500 text-xl font-medium" />
             </TooltipTrigger>
             <TooltipContent className="bg-[#1c1b1e] border-none text-white " >

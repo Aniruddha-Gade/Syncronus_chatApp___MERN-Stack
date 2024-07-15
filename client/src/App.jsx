@@ -26,7 +26,7 @@ const AuthRoute = ({ children }) => {
 function App() {
   const { userInfo, setUserInfo } = useAppStore()
   const [loading, setLoading] = useState(false)
-  // console.log("userInfo from apppp = ",userInfo)
+  console.log("userInfo from App = ",userInfo)
 
   // get user data
   useEffect(() => {
