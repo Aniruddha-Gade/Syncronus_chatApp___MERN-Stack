@@ -2,6 +2,9 @@ import { useAppStore } from "@/store"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
+import ContactsContainer from "./components/ContactsContainer"
+import ChatContainer from "./components/ChatContainer"
+import EmptyChatContainer from "./components/EmptyChatContainer"
 
 const Chat = () => {
 
@@ -18,7 +21,11 @@ const Chat = () => {
 
 
   return (
-    <div>Chat</div>
+    <div className="overflow-hidden h-screen flex border-t-yellow-950">
+      <ContactsContainer/>
+      <EmptyChatContainer/>
+      <ChatContainer/>
+    </div>
   )
 }
 
