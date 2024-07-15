@@ -86,10 +86,10 @@ const ProfileInfo = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger onClick={handleLogout}>
-              <IoPowerSharp className="text-purple-500 text-xl font-medium" />
+              <IoPowerSharp className="text-red-500 text-xl font-medium" />
             </TooltipTrigger>
             <TooltipContent className="bg-[#1c1b1e] border-none text-white " >
-              <p>Edit Profile</p>
+              <p>Logout</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
