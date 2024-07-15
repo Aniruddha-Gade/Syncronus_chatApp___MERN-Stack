@@ -35,12 +35,14 @@ export const signup = async (req, res, next) => {
             });
         }
 
-
+        // create user
         const user = await User.create({ email, password })
 
+        // create token
+        const token = createToken(email, password, user._id)
 
         // set cookies
-        res.cookie("jwt", createToken(email, password, user._id), {
+        res.cookie("jwt", token, {
             tokenExpireTime,
             secure: true,
             sameSite: 'None'
@@ -53,6 +55,7 @@ export const signup = async (req, res, next) => {
                 email: user.email,
                 profileSetup: user.profileSetup
             },
+            token,
             success: true,
             message: 'User Registered Successfully'
         });
@@ -99,8 +102,11 @@ export const login = async (req, res, next) => {
             });
         }
 
+        // create token
+        const token = createToken(email, password, user._id)
+
         // set cookies
-        res.cookie("jwt", createToken(email, password, user._id), {
+        res.cookie("jwt", token, {
             tokenExpireTime,
             secure: true,
             sameSite: 'None'
@@ -112,6 +118,7 @@ export const login = async (req, res, next) => {
         // return success message
         return res.status(200).json({
             user,
+            token,
             success: true,
             message: 'User logged Successfully'
         });
@@ -231,6 +238,31 @@ export const updateProfile = async (req, res, next) => {
         console.log("Error while updating user-info => ", error)
         res.status(500).json({
             message: 'Error while updating user-info',
+            error: error.message
+        })
+    }
+}
+
+
+
+
+// ====================== LOGOUT ======================
+export const logout = async (req, res, next) => {
+    try {
+
+        // clear cookies
+        res.cookie("jwt", "", { maxAge: 1, secure: true, sameSite: 'None' })
+
+        // return success message
+        return res.status(200).json({
+            success: true,
+            message: 'User logout Successfully'
+        });
+
+    } catch (error) {
+        console.log("Error while logging out user => ", error)
+        res.status(500).json({
+            message: 'Error while logging out user',
             error: error.message
         })
     }

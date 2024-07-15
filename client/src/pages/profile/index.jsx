@@ -15,7 +15,7 @@ import { toast } from "sonner"
 
 const Profile = () => {
 
-  const { userInfo, setUserInfo } = useAppStore()
+  const { userInfo, setUserInfo, token } = useAppStore()
   const navigate = useNavigate()
   const [firstName, setFirstName] = useState(userInfo.firstName ? userInfo.firstName : '')
   const [lastName, setLastName] = useState(userInfo.lastName ? userInfo.lastName : '')
@@ -41,7 +41,7 @@ const Profile = () => {
     if (validateProfile()) {
       try {
         const response = await apiClient.post(UPDATE_PROFILE_ROUTE,
-          { firstName, lastName, image, color: selectedColor },
+          { token, firstName, lastName, image, color: selectedColor },
           { withCredentials: true }
         )
         console.log("UPDATE_PROFILE_ROUTE RESPONSE => ", response)

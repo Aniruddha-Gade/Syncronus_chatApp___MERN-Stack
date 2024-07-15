@@ -16,7 +16,7 @@ const Auth = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const navigate = useNavigate()
-  const { setUserInfo } = useAppStore()
+  const { setUserInfo, setToken } = useAppStore()
 
   const validateSignup = () => {
     if (!email.length) {
@@ -54,8 +54,10 @@ const Auth = () => {
       console.log("LOGIN_API_RESPONSE => ", response)
 
       if (response.data.user?._id) {
-        setUserInfo(response.data.user)
-        localStorage.setItem("userInfo", JSON.stringify(response.data?.user));
+        setUserInfo(response.data.user) // set user details to store
+        setToken(response.data.token)  // set token to store
+        localStorage.setItem("userInfo", JSON.stringify(response.data?.user));  // set user details to local storage
+        localStorage.setItem("token", JSON.stringify(response.data?.token));   // set token to store
 
         if (response.user?.profileSetup) {
           navigate("/chat")
@@ -73,8 +75,11 @@ const Auth = () => {
       )
       console.log("SIGNUP_API_RESPONSE => ", response)
       if (response.data.success) {
-        localStorage.setItem("userInfo", JSON.stringify(response.data?.user));
-        setUserInfo(response.data.user)
+        setUserInfo(response.data.user) // set user details to store
+        setToken(response.data.token)  // set token to store
+        localStorage.setItem("userInfo", JSON.stringify(response.data?.user));  // set user details to local storage
+        localStorage.setItem("token", JSON.stringify(response.data?.token));   // set token to store
+
         navigate("/profile")
       }
     }

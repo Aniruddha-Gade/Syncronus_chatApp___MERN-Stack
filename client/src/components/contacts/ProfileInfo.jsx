@@ -11,12 +11,14 @@ import { LOGOUT_ROUTE } from "@/utils/constants"
 
 const ProfileInfo = () => {
 
-  const { userInfo, setUserInfo } = useAppStore()
+  const { userInfo, setUserInfo, token, setToken } = useAppStore()
   const navigate = useNavigate()
 
+
+  // handle Logout
   const handleLogout = async () => {
     try {
-      const response = await apiClient.post(LOGOUT_ROUTE, {},
+      const response = await apiClient.post(LOGOUT_ROUTE, { token },
         { withCredentials: true }
       )
       console.log("LOGOUT_ROUTE API RESPONSE => ", response)
@@ -24,14 +26,15 @@ const ProfileInfo = () => {
       if (response.data.success) {
         // clear userinfo from store
         setUserInfo(null)
+        setToken(null)
 
         // clear local storage
-        localStorage.setItem("userInfo", '')
+        localStorage.removeItem("userInfo")
+        localStorage.removeItem("token")
       }
 
-
     } catch (error) {
-      console.log("", error)
+      console.log("LOGOUT_ROUTE API ERROR", error)
     }
   }
 

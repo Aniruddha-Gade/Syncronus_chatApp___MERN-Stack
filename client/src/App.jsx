@@ -24,9 +24,10 @@ const AuthRoute = ({ children }) => {
 
 
 function App() {
-  const { userInfo, setUserInfo } = useAppStore()
+  const { userInfo, setUserInfo, token } = useAppStore()
   const [loading, setLoading] = useState(false)
-  console.log("userInfo from App = ",userInfo)
+  console.log("userInfo from App = ", userInfo)
+  // console.log("token from App = ",token)
 
   // get user data
   useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
       console.log("userInfo from apppp = ", userInfo)
       try {
         const response = await apiClient.get(GET_USERINFO_ROUTE,
+          { token },
           { withCredentials: true }
         )
         console.log("GET_USERINFO_ROUTE RESPONSE => ", response)
