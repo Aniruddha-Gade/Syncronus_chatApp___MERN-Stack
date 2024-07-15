@@ -2,7 +2,7 @@ import { useAppStore } from "@/store"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import ContactsContainer from "../../components/chat/ContactsContainer"
+import ContactsContainer from "../../components/contacts/ContactsContainer"
 import ChatContainer from "../../components/chat/ChatContainer"
 import EmptyChatContainer from "../../components/chat/EmptyChatContainer"
 
