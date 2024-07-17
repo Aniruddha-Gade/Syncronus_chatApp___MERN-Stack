@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import connectDB from './config/database.js';
 import authRoutes from './routes/AuthRoutes.js';
+import ContactsRoutes from './routes/ContactsRotes.js';
 
 dontenv.config() 
 
@@ -36,6 +37,7 @@ connectDB()
 
 // mount routes
 app.use('/api/auth', authRoutes)
+app.use('/api/contacts', ContactsRoutes)
 
 
 // Default Route

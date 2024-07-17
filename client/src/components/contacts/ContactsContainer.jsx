@@ -1,5 +1,6 @@
 import Title from "@/components/common/Title";
 import ProfileInfo from "./ProfileInfo";
+import NewDM from "./NewDM";
 
 const ContactsContainer = () => {
   return (
@@ -10,6 +11,7 @@ const ContactsContainer = () => {
       <div className="my-5">
         <div className="flex-between pr-10">
           <Title text='Direct Messages' />
+          <NewDM />
         </div>
       </div>
       <div className="my-5">
