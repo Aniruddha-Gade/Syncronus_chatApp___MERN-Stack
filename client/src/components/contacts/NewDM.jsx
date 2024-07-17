@@ -22,7 +22,7 @@ import { Avatar, AvatarImage } from "../ui/avatar"
 
 const NewDM = () => {
 
-    const { token } = useAppStore()
+    const { token, setSelectedChatType, setSelectedChatData } = useAppStore()
     const [openNewContactModal, setOpenNewContactModal] = useState(false)
     const [searchedContacts, setsearchedContacts] = useState([])
 
@@ -49,6 +49,14 @@ const NewDM = () => {
     }
 
     console.log("searchedContacts array value = ", searchedContacts)
+
+    const selectNewContact = (contact) => {
+        setOpenNewContactModal(false) // close modal
+        setSelectedChatType('contact') // set chat type
+        setSelectedChatData(contact) // set user details
+
+        setsearchedContacts([]) // clear search contacts
+    }
 
     return (
         < >
@@ -88,6 +96,7 @@ const NewDM = () => {
                                     {searchedContacts.map(contact => (
                                         <div key={contact._id}
                                             className='flex gap-3 items-center cursor-pointer'
+                                            onClick={() => selectNewContact(contact)}
                                         >
                                             <div className="relative bg-neutral-800 hover:bg-neutral-700 p-2 rounded-md flex gap-5 w-full ">
                                                 <Avatar className="w-12 h-12 rounded-full overflow-hidden">

@@ -8,7 +8,7 @@ import EmptyChatContainer from "../../components/chat/EmptyChatContainer"
 
 const Chat = () => {
 
-  const { userInfo } = useAppStore()
+  const { userInfo, selectedChatType } = useAppStore()
   const navigate = useNavigate()
 
   // if profile setup is incomplete then navigate to '/profile' page
@@ -23,8 +23,9 @@ const Chat = () => {
   return (
     <div className="text-white overflow-hidden h-screen flex border-t-yellow-950">
       <ContactsContainer />
-      {/* <EmptyChatContainer/> */}
-      <ChatContainer />
+      {
+        !selectedChatType ? <EmptyChatContainer /> : <ChatContainer />
+      }
     </div>
   )
 }
