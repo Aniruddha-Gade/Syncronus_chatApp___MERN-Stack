@@ -21,6 +21,14 @@ export const verifyToken = async (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_KEY, (error, payload) => {
         console.log('verified decode token => ', payload);
+        // decode example
+        //    {
+        //   email: 'anigade2@gmail.com',
+        //   userId: '66940b8c270abf314dccaaf8',  
+        //   iat: 1721040442,
+        //   exp: 1980240442
+        // }
+
         // invalid token
         if (error) {
             return res.status(403).json({

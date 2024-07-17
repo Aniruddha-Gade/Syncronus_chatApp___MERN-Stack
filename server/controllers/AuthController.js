@@ -6,8 +6,8 @@ import { compare } from 'bcrypt';
 const tokenExpireTime = 3 * 24 * 60 * 60 * 1000
 
 // create token by JWT
-const createToken = (email, password, userId) => {
-    return jwt.sign({ email, password, userId }, process.env.JWT_KEY, {
+const createToken = (email, userId) => {
+    return jwt.sign({ email, userId }, process.env.JWT_KEY, {
         expiresIn: tokenExpireTime
     })
 }
@@ -39,7 +39,7 @@ export const signup = async (req, res, next) => {
         const user = await User.create({ email, password })
 
         // create token
-        const token = createToken(email, password, user._id)
+        const token = createToken(email, user._id)
 
         // set cookies
         res.cookie("jwt", token, {
@@ -103,7 +103,7 @@ export const login = async (req, res, next) => {
         }
 
         // create token
-        const token = createToken(email, password, user._id)
+        const token = createToken(email, user._id)
 
         // set cookies
         res.cookie("jwt", token, {
@@ -186,8 +186,8 @@ export const updateProfile = async (req, res, next) => {
     try {
         const userId = req.userId;
         const { firstName, lastName, image, color } = req.body
-        console.log("Have to update this values ==> ")
-        console.log({ firstName, lastName, image, color, userId })
+        // console.log("Have to update this values ==> ")
+        // console.log({ firstName, lastName, image, color, userId })
 
 
         if (!userId) {
@@ -214,7 +214,7 @@ export const updateProfile = async (req, res, next) => {
             },
             { new: true, runvalidators: true }
         );
-        console.log("updated User-info = ", updatedUser)
+        // console.log("updated User-info = ", updatedUser)
 
         // if not found
         if (!updatedUser) {
