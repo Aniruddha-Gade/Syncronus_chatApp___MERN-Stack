@@ -6,8 +6,9 @@ import cors from 'cors'
 import connectDB from './config/database.js';
 import authRoutes from './routes/AuthRoutes.js';
 import ContactsRoutes from './routes/ContactsRotes.js';
+import setupSocket from './socket.js';
 
-dontenv.config() 
+dontenv.config()
 
 const PORT = process.env.PORT || 5000;
 const app = express()
@@ -29,6 +30,10 @@ app.use(
 const server = app.listen(PORT, () => {
     console.log(`Server Started on PORT ${PORT}`);
 });
+
+
+// setup socket
+setupSocket(server)
 
 
 // connect Database
