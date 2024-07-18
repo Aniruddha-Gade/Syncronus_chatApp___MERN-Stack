@@ -18,6 +18,8 @@ const Auth = () => {
   const navigate = useNavigate()
   const { setUserInfo, setToken } = useAppStore()
 
+
+  // validate Signup
   const validateSignup = () => {
     if (!email.length) {
       toast.error("Email is required")
@@ -33,6 +35,9 @@ const Auth = () => {
     }
     return true;
   }
+
+
+  // validate login
   const validateLogin = () => {
     if (!email.length) {
       toast.error("Email is required")
@@ -45,6 +50,8 @@ const Auth = () => {
     return true;
   }
 
+
+  // login
   const handleLogin = async () => {
     if (validateLogin()) {
       const response = await apiClient.post(LOGIN_ROUTE,
@@ -67,6 +74,9 @@ const Auth = () => {
     }
 
   }
+
+
+  // signup
   const handleSignup = async () => {
     if (validateSignup()) {
       const response = await apiClient.post(SIGNUP_ROUTE,
@@ -87,7 +97,7 @@ const Auth = () => {
 
 
   return (
-    <div className="flex-center h-screen w-screen ">
+    <div className="flex-center h-screen w-screen bg-[#1d1e26]">
       <div className="h-[80vh] w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] bg-white border-2 border-white text-opacity-90 shadow-2xl rounded-3xl grid xl:grid-cols-2">
 
         <div className="flex-center flex-col gap-10">

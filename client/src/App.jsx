@@ -6,6 +6,7 @@ import { useAppStore } from "./store"
 import { useEffect, useState } from "react"
 import { apiClient } from "./lib/api-client"
 import { GET_USERINFO_ROUTE } from "./utils/constants"
+import Loading from "./components/common/Loading"
 
 
 // private route
@@ -60,13 +61,13 @@ function App() {
     else {
       setLoading(false)
     }
-  }, [userInfo, setUserInfo])
+  }, [token, userInfo, setUserInfo])
 
 
   if (loading) {
-    return (<div className='text-7xl text-red-600 underline animate-bounce'>
-      LOADING
-    </div>)
+    return (
+      <Loading />
+    )
   }
 
   return (
