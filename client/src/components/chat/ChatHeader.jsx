@@ -1,16 +1,52 @@
 import { useAppStore } from '@/store';
 import { RiCloseFill } from 'react-icons/ri';
+import { Avatar, AvatarImage } from '../ui/avatar';
+import { getColor } from '@/lib/utils';
 
 const ChatHeader = () => {
 
-    const { closeChat } = useAppStore()
+    const { closeChat, selectedChatData, selectedChatType } = useAppStore()
+    // console.log("selectedChatData = ", selectedChatData )
 
 
 
     return (
-        <div className="h-[10vh] border-b-2 border-[#2f303b] flex-between px-20">
-            <div className="flex gap-5 items-center">
-                <div className="flex-center gap-3"></div>
+        <div className="h-[10vh] border-b-2 border-[#2f303b] flex-between px-5">
+            <div className="w-full justify-between flex gap-5 items-center ">
+                <div className="flex-center gap-3">
+                    <div className="relative bg-neutral-800 hover:bg-neutral-700 p-2 rounded-md flex gap-5 w-full ">
+                        <Avatar className="w-12 h-12 rounded-full overflow-hidden">
+                            {selectedChatData.image ? <AvatarImage
+                                src={selectedChatData.image}
+                                className="bg-black w-full h-full object-cover"
+                                alt='profile'
+                            />
+                                : <div
+                                    className={`w-12 h-12 text-lg flex-center uppercase font-bold border-[1px] rounded-full 
+                                                                  ${getColor(selectedChatData.selectedColor)}`}
+                                >
+                                    {
+                                        selectedChatData.firstName ? selectedChatData.firstName.split("").shift()
+                                            : selectedChatData.email.split("").shift()
+                                    }
+                                </div>
+                            }
+                        </Avatar>
+                    </div>
+                    {/* user first/last name */}
+                    <div className="flex flex-col">
+                        <p>
+                            {selectedChatData.firstName && selectedChatData.lastName ? `${selectedChatData.firstName} ${selectedChatData.lastName}` : `${selectedChatData.email}`}
+                        </p>
+                        <p className="text-neutral-500 text-sm">{selectedChatData.email}</p>
+                    </div>
+                    {/* <div>
+                        {selectedChatType === 'contact' && `${selectedChatData.firstName + selectedChatData.lastName}`} <br />
+                        {selectedChatType === 'contact' && `${selectedChatData.email }`}
+                    </div> */}
+                </div>
+
+
                 <div className="flex-center gap-5">
                     <button
                         onClick={closeChat}
