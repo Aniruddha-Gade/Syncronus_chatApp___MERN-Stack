@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { FiEdit2 } from 'react-icons/fi'
 import { useNavigate } from "react-router-dom"
 import { IoPowerSharp } from "react-icons/io5"
+import { MdOutlineCancel } from "react-icons/md";
 import { apiClient } from "@/lib/api-client"
 import { LOGOUT_ROUTE } from "@/utils/constants"
 
@@ -136,7 +137,7 @@ const ProfileInfo = () => {
                   onClick={() => setOpenLogoutModal(false)}
                   className="flex-center gap-3 font-semibold p-3 px-4 bg-green-950 hover:bg-green-900  rounded-md "
                 >
-                  <IoPowerSharp className="text-green-500 text-xl font-medium" />
+                  <MdOutlineCancel className="text-green-500 text-xl font-medium" />
                   <p>Cancel</p>
                 </button>
               </div>
