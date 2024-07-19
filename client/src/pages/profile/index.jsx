@@ -48,6 +48,7 @@ const Profile = () => {
         if (response.data.success && response.data.user) {
           toast.success("Profile updated successfully")
           setUserInfo({ ...response.data.user })
+          localStorage.setItem("userInfo", JSON.stringify(response.data?.user));  // set user details to local storage
           navigate("/chat")
         }
       } catch (error) {

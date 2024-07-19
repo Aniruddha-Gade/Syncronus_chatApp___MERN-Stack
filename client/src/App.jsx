@@ -28,7 +28,7 @@ function App() {
   const { userInfo, setUserInfo, token } = useAppStore()
   const [loading, setLoading] = useState(false)
   console.log("userInfo from App = ", userInfo)
-  // console.log("token from App = ",token)
+  // console.log("token from App = ", token)
 
   // get user data
   useEffect(() => {
@@ -36,7 +36,7 @@ function App() {
       setLoading(true)
       console.log("userInfo from apppp = ", userInfo)
       try {
-        const response = await apiClient.get(GET_USERINFO_ROUTE,
+        const response = await apiClient.post(GET_USERINFO_ROUTE,
           { token },
           { withCredentials: true }
         )

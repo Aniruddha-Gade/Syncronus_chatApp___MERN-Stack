@@ -1,5 +1,9 @@
+import { useAppStore } from "@/store"
 import EmojiPicker from "emoji-picker-react"
 import { useEffect, useRef, useState } from "react"
+import { useSocket } from "@/context/SocketContext"
+
+// icons
 import { GrAttachment } from 'react-icons/gr'
 import { IoSend } from "react-icons/io5"
 import { RiEmojiStickerLine } from "react-icons/ri"
@@ -9,6 +13,10 @@ const MessageBar = () => {
     const emojiPickerRef = useRef(null)
     const [message, setMessage] = useState('')
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
+    const { userInfo, selectedChatData, selectedChatType } = useAppStore()
+    const socket = useSocket()
+
+    // console.log({ userInfo, selectedChatData, selectedChatType })
 
     // add emoji in input
     const handleAddEmoji = (emoji) => {
@@ -18,7 +26,19 @@ const MessageBar = () => {
 
     // send message 
     const handleSendMessage = async () => {
-
+        if (message) {
+            if (selectedChatType === 'contact') {
+                socket.emit("sendMessage", {
+                    sender: userInfo._id,
+                    recipient: selectedChatData._id,
+                    content: message,
+                    messageType: 'text',
+                    fileUrl: undefined
+                })
+                setMessage('')
+                console.log("Message sent through socket ")
+            }
+        }
     }
 
     // close emoji picker , if outside click
@@ -74,10 +94,12 @@ const MessageBar = () => {
             </div>
 
             {/* send message button */}
-            <button className="bg-[#8417ff] hover:bg-[#741bda] flex-center p-5 rounded-md focus:border-none focus:outline-none
+            <button
+                onClick={handleSendMessage}
+                className="bg-[#8417ff] hover:bg-[#741bda] flex-center p-5 rounded-md focus:border-none focus:outline-none
                          active:scale-90 duration-300 transition-all">
                 <IoSend
-                    onClick={handleSendMessage}
+
                     className='text-2xl'
                 />
             </button>

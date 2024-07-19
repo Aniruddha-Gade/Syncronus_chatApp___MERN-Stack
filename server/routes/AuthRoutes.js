@@ -6,7 +6,7 @@ const authRoutes = Router()
 
 authRoutes.post('/signup', signup)
 authRoutes.post('/login', login)
-authRoutes.get('/user-info', verifyToken, getUserInfo)
+authRoutes.post('/user-info', verifyToken, getUserInfo)
 authRoutes.post('/update-profile', verifyToken, updateProfile)
 authRoutes.post('/logout', verifyToken, logout)
 
