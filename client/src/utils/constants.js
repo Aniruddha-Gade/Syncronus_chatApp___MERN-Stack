@@ -15,3 +15,10 @@ export const LOGOUT_ROUTE = `${authRoutes}/logout`
 export const contactsRoutes = `/api/contacts`
 
 export const SEARCH_CONTACTS_ROUTE = `${contactsRoutes}/search-contacts`
+
+
+
+// message Routes
+export const messageRoutes = `/api/message`
+
+export const GET_ALL_MESSAGES_ROUTE = `${messageRoutes}/get-all-messages`

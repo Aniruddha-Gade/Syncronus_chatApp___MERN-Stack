@@ -7,6 +7,7 @@ import connectDB from './config/database.js';
 import authRoutes from './routes/AuthRoutes.js';
 import ContactsRoutes from './routes/ContactsRotes.js';
 import setupSocket from './socket.js';
+import MessageRoutes from './routes/MessageRoutes.js';
 
 dontenv.config()
 
@@ -43,6 +44,7 @@ connectDB()
 // mount routes
 app.use('/api/auth', authRoutes)
 app.use('/api/contacts', ContactsRoutes)
+app.use('/api/message', MessageRoutes)
 
 
 // Default Route

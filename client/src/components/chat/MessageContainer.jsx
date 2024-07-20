@@ -1,10 +1,12 @@
+import { apiClient } from "@/lib/api-client";
 import { useAppStore } from "@/store"
+import { GET_ALL_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
 import { useEffect, useRef } from "react";
 
 const MessageContainer = () => {
   const scrollRef = useRef();
-  const { selectedChatType, selectedChatData, userInfo, selectedChatMessages } = useAppStore();
+  const { selectedChatType, selectedChatData, selectedChatMessages, token, setselectedChatMessages } = useAppStore();
 
   // scrol down as new message come 
   useEffect(() => {
@@ -12,6 +14,33 @@ const MessageContainer = () => {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [selectedChatMessages]);
+
+
+  useEffect(() => {
+    try {
+      const getAllMessages = async () => {
+        const response = await apiClient.post(GET_ALL_MESSAGES_ROUTE,
+          { token, recipientId: selectedChatData._id },
+          { withCredentials: true }
+        )
+
+        console.log("GET_ALL_MESSAGES_ROUTE RESPONSE => ", response)
+        if (response.data.AllMessages) {
+          setselectedChatMessages(response.data.AllMessages)
+        }
+      }
+
+
+      if (selectedChatData._id) {
+        if (selectedChatType === 'contact') {
+          getAllMessages()
+        }
+      }
+    } catch (error) {
+      console.log()
+    }
+  }, [selectedChatData, token, setselectedChatMessages, selectedChatType])
+
 
 
   const renderMessages = () => {
@@ -45,10 +74,9 @@ const MessageContainer = () => {
       {message.messageType === "text" && (
         <div
           className={`
-            ${
-              message.sender === selectedChatData._id
+            ${message.sender === selectedChatData._id
               ? "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
-                : "bg-[#8417ff]/5 text-[#8417ff] border-[#8417ff]/50"
+              : "bg-[#8417ff]/5 text-[#8417ff] border-[#8417ff]/50"
             }
             border inline-block p-4 rounded my-1 max-w-[50%] break-words
           `}
@@ -61,7 +89,7 @@ const MessageContainer = () => {
       </div>
     </div>
   );
-  
+
 
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
