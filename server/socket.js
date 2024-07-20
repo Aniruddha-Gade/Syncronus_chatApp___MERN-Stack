@@ -4,7 +4,8 @@ import Message from "./models/messageModel.js";
 const setupSocket = (server) => {
     const io = new SocketIoServer(server, {
         cors: {
-            origin: [process.env.ORIGIN, 'http://localhost:5173'], // frontend link
+            // origin: [process.env.ORIGIN, 'http://localhost:5173'], // frontend link
+            origin: '*',
             methods: ['GET', 'POST'],
             credentials: true
         }
