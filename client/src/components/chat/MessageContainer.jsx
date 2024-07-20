@@ -1,48 +1,74 @@
 import { useAppStore } from "@/store"
+import moment from "moment";
+import { useEffect, useRef } from "react";
 
 const MessageContainer = () => {
+  const scrollRef = useRef();
+  const { selectedChatType, selectedChatData, userInfo, selectedChatMessages } = useAppStore();
 
-  const { selectedChatMessages, userInfo } = useAppStore()
-  console.log({ selectedChatMessages })
-  // console.log('userInfo._id = ', userInfo._id)
-  // console.log('selectedChatMessages[0].sender_id = ', selectedChatMessages[0].sender)
+  // scrol down as new message come 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [selectedChatMessages]);
 
-  if (!selectedChatMessages.length) {
-    console.log("messge Not found ")
-  } else {
-    if (userInfo._id === selectedChatMessages[0].sender) {
-      console.log("Matched 🟢🟢🟢")
-    }
-    else {
-      console.log("Not 🔴🔴🔴")
-    }
-  }
+
+  const renderMessages = () => {
+    let lastDate = null;
+    return selectedChatMessages.map((message, index) => {
+      const messageDate = moment(message.timestamp).format("YYYY-MM-DD");
+      const showDate = messageDate !== lastDate;
+      lastDate = messageDate;
+      return (
+        <div key={message._id + index}>
+          {showDate && <div className="text-center text-gray-500 my-2">
+            {moment(message.timestamp).format("LL")}
+          </div>
+          }
+
+          {
+            selectedChatType === 'contact' && renderDMMessages(message)
+          }
+        </div>
+      );
+    });
+  };
+
+
+  const renderDMMessages = (message) => (
+    <div
+      className={`flex flex-col
+        ${message.sender === selectedChatData._id ? "items-start" : "items-end"}
+      `}
+    >
+      {message.messageType === "text" && (
+        <div
+          className={`
+            ${
+              message.sender === selectedChatData._id
+              ? "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+                : "bg-[#8417ff]/5 text-[#8417ff] border-[#8417ff]/50"
+            }
+            border inline-block p-4 rounded my-1 max-w-[50%] break-words
+          `}
+        >
+          {message.content}
+        </div>
+      )}
+      <div className="text-xs text-gray-600">
+        {moment(message.timestamp).format("LT")}
+      </div>
+    </div>
+  );
+  
 
   return (
-    <div className="flex-1 p-4 px-8 overflow-y-auto scrollbar-hidden w-full md:w-[65vw] lg:w-[70vw] xl:w-[80vw]">
-      {
-        !selectedChatMessages.length ? <div className="text-4xl bg-red-600 ">
-          Message Not found
-        </div>
-          :
-          <div className="flex gap-3 text-black flex-col">
-            {
-              selectedChatMessages?.map((message) => (
-                <div key={message._id} className="bg-red-000 w-full " >
-                  <div className={` ${userInfo._id === message.sender ?
-                    'bg-green-700 flex justify-end' : 'bg-yellow-700 flex justify-start'} p-2 w-fi font-bold text-3xl `}
-
-                  >
-                    {message.content}
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-      }
-
+    <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
+      {renderMessages()}
+      <div ref={scrollRef} />
     </div>
-  )
-}
+  );
+};
 
-export default MessageContainer
+export default MessageContainer;
