@@ -19,8 +19,7 @@ app.use(express.json()); // to parse json body
 app.use(cookieParser());
 app.use(
     cors({
-        // origin: [process.env.ORIGIN], // frontend link
-        origin: "*",
+        origin: [process.env.ORIGIN, 'http://localhost:5173'], // frontend link
         methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'],
         credentials: true
     })
