@@ -35,15 +35,11 @@ const ChatHeader = () => {
                     </div>
                     {/* user first/last name */}
                     <div className="flex flex-col">
-                        <p>
+                        <p className='capitalize'>
                             {selectedChatData.firstName && selectedChatData.lastName ? `${selectedChatData.firstName} ${selectedChatData.lastName}` : `${selectedChatData.email}`}
                         </p>
                         <p className="text-neutral-500 text-sm">{selectedChatData.email}</p>
                     </div>
-                    {/* <div>
-                        {selectedChatType === 'contact' && `${selectedChatData.firstName + selectedChatData.lastName}`} <br />
-                        {selectedChatType === 'contact' && `${selectedChatData.email }`}
-                    </div> */}
                 </div>
 
 
