@@ -70,11 +70,11 @@ const Profile = () => {
 
   return (
     <div className="bg-[#1b1c24] h-screen flex-center flex-col gap-10">
-      <div className="flex flex-col gap-10 w-[80vw] md:w-max ">
+      <div className="flex flex-col gap-10 w-[80vw] md:w-[500px] 2xl:w-[700px] ">
         <div onClick={handleProfileBackNavigation}>
           <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer hover:scale-110 duration-300" />
         </div>
-        <div className="grid grid-cols-2 ">
+        <div className="grid grid-cols-2">
           <div
             className="h-full w-32 md:w-48 md:h-48 relative flex-center"
             onMouseEnter={() => setHovered(true)}
@@ -104,7 +104,7 @@ const Profile = () => {
 
           </div>
 
-          <div className="min-w-32 flex-center flex-col gap-5 text-white  ">
+          <div className="min-w-52 flex-center flex-col gap-5 text-white  ">
             {/* email */}
             <div className="w-full">
               <Input
@@ -112,7 +112,7 @@ const Profile = () => {
                 type='email'
                 disabled
                 value={userInfo.email}
-                className="p-6 bg-[#2c2e3b] rounded-lg border-none"
+                className="p-6 bg-[#2c2e3b] rounded-lg border-none w-full"
               />
             </div>
             {/* firstName */}

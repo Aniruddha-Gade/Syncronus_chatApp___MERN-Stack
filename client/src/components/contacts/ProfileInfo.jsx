@@ -77,10 +77,10 @@ const ProfileInfo = () => {
 
         {/* user first/last name */}
         <div>
-          <p>
+          <p className='capitalize'>
             {userInfo.firstName && userInfo.lastName ? `${userInfo.firstName} ${userInfo.lastName}` : ''}
           </p>
-          <p className="text-neutral-500 text-sm">{userInfo.email}</p>
+          {/* <p className="text-neutral-500 text-xs">{userInfo.email}</p> */}
         </div>
       </div>
 
