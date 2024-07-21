@@ -3,22 +3,32 @@ import ProfileInfo from "./ProfileInfo";
 import NewDM from "./NewDM";
 import { useEffect } from "react";
 import { apiClient } from "@/lib/api-client";
-import { GET_ALL_CONTACTS_ROUTE } from "@/utils/constants";
+import { GET_CONTACTS_FOR_DM_LIST_ROUTE } from "@/utils/constants";
+import { useAppStore } from "@/store";
+import ContactsList from "../common/ContactsList";
 
 const ContactsContainer = () => {
+
+  const { token, directMessagesContacts, setDirectMessagesContacts } = useAppStore()
 
   useEffect(() => {
     try {
       const getAllContacts = async () => {
-        const res = await apiClient.get(GET_ALL_CONTACTS_ROUTE)
-        console.log("GET_ALL_CONTACTS_ROUTE RESPONSE 🟢🟢🟢 => ", res)
+        const res = await apiClient.post(GET_CONTACTS_FOR_DM_LIST_ROUTE,
+          { token, },
+          { withCredentials: true }
+        )
+        console.log("GET_CONTACTS_FOR_DM_LIST_ROUTE RESPONSE 🟢🟢🟢 => ", res)
+        if (res.data.success) {
+          setDirectMessagesContacts(res.data.contacts)
+        }
       }
 
       getAllContacts()
     } catch (error) {
-      console.log("GET_ALL_CONTACTS_ROUTE error 🔴🔴🔴 = ", error)
+      console.log("GET_CONTACTS_FOR_DM_LIST_ROUTE error 🔴🔴🔴 = ", error)
     }
-  }, [])
+  }, [token, setDirectMessagesContacts])
 
 
   return (
@@ -30,6 +40,9 @@ const ContactsContainer = () => {
         <div className="flex-between pr-10">
           <Title text='Direct Messages' />
           <NewDM />
+        </div>
+        <div className="overflow-y-auto max-h-[38vh] scrollbar-hidden">
+          <ContactsList contacts={directMessagesContacts} />
         </div>
       </div>
       <div className="my-5">
