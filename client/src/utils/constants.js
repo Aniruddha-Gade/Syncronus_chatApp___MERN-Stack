@@ -15,6 +15,7 @@ export const LOGOUT_ROUTE = `${authRoutes}/logout`
 export const contactsRoutes = `/api/contacts`
 
 export const SEARCH_CONTACTS_ROUTE = `${contactsRoutes}/search-contacts`
+export const GET_ALL_CONTACTS_ROUTE = `${contactsRoutes}/get-all-contacts`
 
 
 

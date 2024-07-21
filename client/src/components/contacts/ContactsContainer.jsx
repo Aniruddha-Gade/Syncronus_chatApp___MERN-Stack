@@ -1,8 +1,26 @@
 import Title from "@/components/common/Title";
 import ProfileInfo from "./ProfileInfo";
 import NewDM from "./NewDM";
+import { useEffect } from "react";
+import { apiClient } from "@/lib/api-client";
+import { GET_ALL_CONTACTS_ROUTE } from "@/utils/constants";
 
 const ContactsContainer = () => {
+
+  useEffect(() => {
+    try {
+      const getAllContacts = async () => {
+        const res = await apiClient.get(GET_ALL_CONTACTS_ROUTE)
+        console.log("GET_ALL_CONTACTS_ROUTE RESPONSE 🟢🟢🟢 => ", res)
+      }
+
+      getAllContacts()
+    } catch (error) {
+      console.log("GET_ALL_CONTACTS_ROUTE error 🔴🔴🔴 = ", error)
+    }
+  }, [])
+
+
   return (
     <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] ">
       <div className="pt-3">

@@ -45,3 +45,27 @@ export const searchContacts = async (req, res) => {
         })
     }
 }
+
+
+
+// ====================== SEARCH CONTACTS ======================
+export const getAllContacts = async (req, res) => {
+    try {
+        
+        const contacts = await User.find();
+        
+
+        return res.status(200).json({
+            contacts,
+            success: true,
+            message: 'Search contacts fetched successfully'
+        });
+    } catch (error) {
+        console.log(error);
+        console.log("Error while searching contacts => ", error)
+        res.status(500).json({
+            message: 'Error while searching contacts',
+            error: error.message
+        })
+    }
+}
