@@ -71,10 +71,10 @@ const Profile = () => {
   return (
     <div className="bg-[#1b1c24] h-screen flex-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-[500px] 2xl:w-[700px] ">
-        <div onClick={handleProfileBackNavigation}>
+        <div onClick={handleProfileBackNavigation} className="w-fit">
           <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer hover:scale-110 duration-300" />
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid  grid-cols-1 gap-10 md:gap-0 md:grid-cols-2">
           <div
             className="h-full w-32 md:w-48 md:h-48 relative flex-center"
             onMouseEnter={() => setHovered(true)}
@@ -135,6 +135,8 @@ const Profile = () => {
               />
             </div>
 
+
+            {/* choose profile color  */}
             <div className='w-full flex gap-5 justify-between'>
               {colors.map((color, ind) => (
                 <div

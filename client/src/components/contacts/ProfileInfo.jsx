@@ -55,7 +55,7 @@ const ProfileInfo = () => {
 
   return (
     <div className="absolute bottom-0 h-16 flex-between px-2 w-full bg-[#2a2b33]">
-      <div className="flex-center gap-3">
+      <div className="flex-center gap-2">
         <div className="w-12 h-12 relative">
           <Avatar className="w-12 h-12 rounded-full overflow-hidden">
             {userInfo.image ? <AvatarImage
@@ -76,20 +76,31 @@ const ProfileInfo = () => {
         </div>
 
         {/* user first/last name */}
-        <div>
+        {/* <div>
           <p className='capitalize'>
             {userInfo.firstName && userInfo.lastName ? `${userInfo.firstName} ${userInfo.lastName}` : ''}
           </p>
-          {/* <p className="text-neutral-500 text-xs">{userInfo.email}</p> */}
+          <p className="text-neutral-500 text-xs">{userInfo.email}</p>
+        </div> */}
+
+        <div className="flex items-center justify-between p-2 w-full lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col">
+            <p className="capitalize">
+              {userInfo.firstName && userInfo.lastName ? `${userInfo.firstName} ${userInfo.lastName}` : ''}
+            </p>
+            <p className="text-neutral-500 text-xs">{userInfo.email}</p>
+          </div>
+          
         </div>
+
       </div>
 
-      <div className="flex gap-5">
+      <div className="flex gap-5 md:gap-3 md:flex-col 2xl:gap-5 2xl:flex-row  ">
         {/* edit profile button */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger onClick={() => navigate('/profile')}>
-              <FiEdit2 className="text-purple-500 text-xl font-medium" />
+              <FiEdit2 className="text-purple-500 text-2xl md:text-xl font-medium" />
             </TooltipTrigger>
             <TooltipContent className="bg-[#1c1b1e] border-none text-white " >
               <p>Edit Profile</p>
@@ -107,7 +118,7 @@ const ProfileInfo = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <IoPowerSharp className="text-red-500 text-xl font-medium" />
+                  <IoPowerSharp className="text-red-500 text-2xl md:text-xl font-medium" />
                 </TooltipTrigger>
                 <TooltipContent className="bg-[#1c1b1e] border-none text-white " >
                   <p>Logout</p>

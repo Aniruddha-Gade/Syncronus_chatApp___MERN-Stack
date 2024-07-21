@@ -59,7 +59,7 @@ const MessageBar = () => {
 
 
     return (
-        <div className="bg-[#1c1d25] h-[10vh] px-8 mb-6 flex-center gap-6 ">
+        <div className="bg-[#1c1d25] md:h-[10vh] px-4 md:px-8 mb-2 md:mb-4 flex-center gap-2 md:gap-6 ">
             <div className="bg-[#2a2b33] flex flex-1 rounded-md items-center gap-5 pr-5 ">
                 {/* messgae input */}
                 <input
