@@ -1,15 +1,21 @@
+import dontenv from 'dotenv'
 import { Server as SocketIoServer } from "socket.io";
 import Message from "./models/messageModel.js";
+dontenv.config()
+
+const ORIGIN = process.env.ORIGIN
 
 const setupSocket = (server) => {
+
     const io = new SocketIoServer(server, {
         cors: {
-            // origin: [process.env.ORIGIN, 'http://localhost:5173'], // frontend link
-            origin: '*',
+            origin: [ORIGIN, 'http://localhost:5173'], // frontend link
+            // origin: '*',
             methods: ['GET', 'POST'],
             credentials: true
         }
     });
+    // console.log("ORIGIN from socket = ", ORIGIN)
 
     // map
     const userSocketMap = new Map();
