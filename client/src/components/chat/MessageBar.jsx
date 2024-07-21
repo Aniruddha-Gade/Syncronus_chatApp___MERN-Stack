@@ -67,7 +67,7 @@ const MessageBar = () => {
                     placeholder="Enter a message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="bg-transparent p-5 flex-1 rounded-md focus:border-none focus:outline-none "
+                    className="bg-transparent w-[70px] px-3 py-5 md:p-5 flex-1 rounded-md focus:border-none focus:outline-none "
                 />
                 <button className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 transition-all">
                     <GrAttachment className='text-2xl' />
