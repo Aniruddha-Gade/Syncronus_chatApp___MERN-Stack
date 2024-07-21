@@ -64,7 +64,7 @@ const ProfileInfo = () => {
               alt='profile' />
               : <div
                 className={`w-12 h-12 text-lg flex-center uppercase font-bold border-[1px] rounded-full 
-              ${getColor(userInfo.selectedColor)}`}
+              ${getColor(userInfo.color)}`}
               >
                 {
                   userInfo.firstName ? userInfo.firstName.split("").shift()
@@ -90,7 +90,7 @@ const ProfileInfo = () => {
             </p>
             <p className="text-neutral-500 text-xs">{userInfo.email}</p>
           </div>
-          
+
         </div>
 
       </div>
