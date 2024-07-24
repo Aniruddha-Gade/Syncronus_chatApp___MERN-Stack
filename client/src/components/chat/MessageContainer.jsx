@@ -112,7 +112,7 @@ const MessageContainer = () => {
             </div>
 
             <div className="flex flex-col gap-5">
-              <div className="h-9 w-1/3 rounded-lg skeleton"></div>
+              <div className="h-9 w-1/4 rounded-lg skeleton"></div>
             </div>
 
           </div>
