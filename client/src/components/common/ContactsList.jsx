@@ -35,7 +35,8 @@ const ContactsList = ({ contacts, isChannel = false }) => {
                         onClick={() => handleClickContact(contact)}
                     >
                         <div className="flex gap-5 items-center justify-start text-neutral-300">
-                            {!isChannel && (
+                            {!isChannel ?
+                                // for contacts
                                 <Avatar className="w-10 h-10 rounded-full overflow-hidden">
                                     {contact.image ? <AvatarImage
                                         src={contact.image}
@@ -56,7 +57,13 @@ const ContactsList = ({ contacts, isChannel = false }) => {
                                         </div>
                                     }
                                 </Avatar>
-                            )}
+
+                                // for channels
+                                :
+                                <div className="bg-[#ffffff22] h-10 w-10 flex items-center justify-center rounded-full">
+                                    #
+                                </div>
+                            }
 
                             {isChannel ? (
                                 <span className="capitalize">{contact.channelName}</span>

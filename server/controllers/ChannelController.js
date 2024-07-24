@@ -70,3 +70,39 @@ export const createChannel = async (req, res) => {
         });
     }
 };
+
+
+
+
+
+// ====================== GET ALL CHANNELS ======================
+export const getUserChannels = async (req, res) => {
+    try {
+        const { userId } = req;
+
+        const channels = await Channel.find({
+            $or: [{ admin: userId }, { members: userId }]
+        })
+            .populate("admin", "firstName lastName email image")
+            .populate("members", "firstName lastName email image")
+            .sort({ updatedAt: -1 })
+
+
+        // console.log("all user Channels = ", channels)
+
+
+        // return success response
+        return res.status(200).json({
+            channels,
+            success: true,
+            message: 'User channels fetched successfully'
+        });
+
+    } catch (error) {
+        console.log("Error while fetching user channels => ", error);
+        res.status(500).json({
+            message: 'Error while fetching user channels',
+            error: error.message
+        });
+    }
+};

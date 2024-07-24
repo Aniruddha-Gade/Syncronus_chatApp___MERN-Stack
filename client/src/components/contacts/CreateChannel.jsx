@@ -68,7 +68,7 @@ const CreateChannel = () => {
         }
     }
 
-    console.log('channels from store = ', channels)
+    // console.log('channels from store = ', channels)
 
 
     useEffect(() => {
@@ -147,7 +147,7 @@ const CreateChannel = () => {
                         <div>
                             <Button
                                 onClick={createChannel}
-                                className="w-full bg-green-700 hover:bg-purple-900 transition-all duration-300 active:scale-95"
+                                className="w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300 active:scale-95"
                             >
                                 Create Channel
                             </Button>

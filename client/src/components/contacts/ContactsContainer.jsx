@@ -3,33 +3,53 @@ import ProfileInfo from "./ProfileInfo";
 import NewDM from "./NewDM";
 import { useEffect } from "react";
 import { apiClient } from "@/lib/api-client";
-import { GET_CONTACTS_FOR_DM_LIST_ROUTE } from "@/utils/constants";
+import { GET_CONTACTS_FOR_DM_LIST_ROUTE, GET_USER_CHANNELS_ROUTE } from "@/utils/constants";
 import { useAppStore } from "@/store";
 import ContactsList from "../common/ContactsList";
 import CreateChannel from "./CreateChannel";
 
 const ContactsContainer = () => {
 
-  const { token, directMessagesContacts, setDirectMessagesContacts, channels } = useAppStore()
+  const { token, directMessagesContacts, setDirectMessagesContacts, channels, setChannels } = useAppStore()
 
   useEffect(() => {
+    // get All Contacts
     try {
       const getAllContacts = async () => {
         const res = await apiClient.post(GET_CONTACTS_FOR_DM_LIST_ROUTE,
           { token, },
           { withCredentials: true }
         )
-        console.log("GET_CONTACTS_FOR_DM_LIST_ROUTE RESPONSE 🟢🟢🟢 => ", res)
+        console.log("GET_CONTACTS_FOR_DM_LIST_ROUTE RESPONSE => ", res)
         if (res.data.success) {
           setDirectMessagesContacts(res.data.contacts)
         }
       }
-
       getAllContacts()
+
     } catch (error) {
-      console.log("GET_CONTACTS_FOR_DM_LIST_ROUTE error 🔴🔴🔴 = ", error)
+      console.log("GET_CONTACTS_FOR_DM_LIST_ROUTE ERROR 🔴🔴🔴 = ", error)
     }
-  }, [token, setDirectMessagesContacts])
+
+    // get User Channels
+    try {
+      const getUserChannels = async () => {
+        const res = await apiClient.get(GET_USER_CHANNELS_ROUTE, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+        console.log("GET_USER_CHANNELS_ROUTE RESPONSE => ", res)
+        if (res.data.success) {
+          setChannels(res.data.channels)
+        }
+      }
+      getUserChannels()
+    } catch (error) {
+      console.log("GET_USER_CHANNELS_ROUTE ERROR 🔴🔴🔴 = ", error)
+    }
+  }, [token, setDirectMessagesContacts, setChannels])
 
 
   return (
