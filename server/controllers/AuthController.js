@@ -42,7 +42,7 @@ export const signup = async (req, res, next) => {
         const token = createToken(email, user._id)
 
         // set cookies
-        res.cookie("jwt", token, {
+        res.cookie("token", token, {
             tokenExpireTime,
             secure: true,
             sameSite: 'None'
@@ -106,7 +106,7 @@ export const login = async (req, res, next) => {
         const token = createToken(email, user._id)
 
         // set cookies
-        res.cookie("jwt", token, {
+        res.cookie("token", token, {
             tokenExpireTime,
             secure: true,
             sameSite: 'None'

@@ -6,10 +6,11 @@ import { apiClient } from "@/lib/api-client";
 import { GET_CONTACTS_FOR_DM_LIST_ROUTE } from "@/utils/constants";
 import { useAppStore } from "@/store";
 import ContactsList from "../common/ContactsList";
+import CreateChannel from "./CreateChannel";
 
 const ContactsContainer = () => {
 
-  const { token, directMessagesContacts, setDirectMessagesContacts } = useAppStore()
+  const { token, directMessagesContacts, setDirectMessagesContacts, channels } = useAppStore()
 
   useEffect(() => {
     try {
@@ -33,7 +34,7 @@ const ContactsContainer = () => {
 
   return (
     <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] ">
-      <div className="pt-3">
+      <div className="">
         <Logo />
       </div>
       <div className="my-5">
@@ -45,9 +46,14 @@ const ContactsContainer = () => {
           <ContactsList contacts={directMessagesContacts} />
         </div>
       </div>
+
       <div className="my-5">
         <div className="flex-between pr-10">
           <Title text='Channels' />
+          <CreateChannel />
+        </div>
+        <div className="overflow-y-auto max-h-[38vh] scrollbar-hidden">
+          <ContactsList contacts={channels} isChannel={true} />
         </div>
       </div>
 
@@ -60,7 +66,7 @@ export default ContactsContainer
 
 const Logo = () => {
   return (
-    <div className="flex p-5  justify-start items-center gap-2">
+    <div className="flex p-5 justify-start items-center gap-2">
       <svg
         id="logo-38"
         width="78"

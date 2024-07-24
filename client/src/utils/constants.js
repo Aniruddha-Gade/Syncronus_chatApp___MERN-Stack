@@ -16,9 +16,19 @@ export const contactsRoutes = `/api/contacts`
 
 export const SEARCH_CONTACTS_ROUTE = `${contactsRoutes}/search-contacts`
 export const GET_CONTACTS_FOR_DM_LIST_ROUTE = `${contactsRoutes}/get-contacts-for-dm`
+export const GET_ALL_CONTACTS_ROUTE = `${contactsRoutes}/get-all-contacts`
 
 
 // message Routes
 export const messageRoutes = `/api/message`
 
 export const GET_ALL_MESSAGES_ROUTE = `${messageRoutes}/get-all-messages`
+
+
+
+// channel Routes
+export const channelRoutes = `/api/channel`
+
+export const CREATE_CHANNEL_ROUTE = `${channelRoutes}/create-channel`
+
+

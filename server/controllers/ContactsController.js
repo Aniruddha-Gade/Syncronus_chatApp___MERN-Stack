@@ -39,7 +39,6 @@ export const searchContacts = async (req, res) => {
             message: 'Search contacts fetched successfully'
         });
     } catch (error) {
-        console.log(error);
         console.log("Error while searching contacts => ", error)
         res.status(500).json({
             message: 'Error while searching contacts',
@@ -116,10 +115,45 @@ export const getContactsForDMList = async (req, res) => {
             message: 'Search contacts fetched successfully'
         });
     } catch (error) {
-        console.log(error);
         console.log("Error while searching contacts => ", error)
         res.status(500).json({
             message: 'Error while searching contacts',
+            error: error.message
+        })
+    }
+}
+
+
+
+
+// ====================== GET ALL CONTACTS ======================
+export const getAllContacts = async (req, res) => {
+    try {
+
+        const users = await User.find(
+            { _id: { $ne: req.userId } },
+            'firstName lastName _id email'
+        )
+
+        // console.log('users => ', users)
+
+        const contacts = users.map((user) => ({
+            label: user.firstName ? `${user.firstName} ${user.lastName}` : user.email,
+            value: user._id
+        }))
+
+        // console.log('contacts => ', contacts)
+
+
+        return res.status(200).json({
+            contacts,
+            success: true,
+            message: 'All contacts fetched successfully'
+        });
+    } catch (error) {
+        console.log("Error while fetching all contacts => ", error)
+        res.status(500).json({
+            message: 'Error while fetching all contacts',
             error: error.message
         })
     }

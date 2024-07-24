@@ -3,10 +3,14 @@ import jwt from "jsonwebtoken";
 
 export const verifyToken = async (req, res, next) => {
     // extract token by anyone from this 3 ways
-    const token = req.body?.token || req.cookie?.token
+    const token = req.body?.token
+        || req.cookies?.token
+        || req.header('Authorization')?.replace('Bearer ', '');
+
 
     // if token is undefined
     if (!token) {
+        console.log('Token is Missing')
         return res.status(401).json({
             status: false,
             message: 'Token is Missing'
@@ -20,7 +24,7 @@ export const verifyToken = async (req, res, next) => {
 
 
     jwt.verify(token, process.env.JWT_KEY, (error, payload) => {
-        console.log('verified decode token => ', payload);
+        // console.log('verified decode token => ', payload);
         // decode example
         //    {
         //   email: 'anigade2@gmail.com',

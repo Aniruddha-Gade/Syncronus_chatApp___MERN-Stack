@@ -18,7 +18,7 @@ const ContactsList = ({ contacts, isChannel = false }) => {
         setSelectedChatData(contact)
     }
 
-    // console.log("DM contacts = ",contacts)
+    // console.log("DM contacts = ", contacts)
     // console.log("selectedChatData = ", selectedChatData)
 
     if (!contacts) {
@@ -59,7 +59,7 @@ const ContactsList = ({ contacts, isChannel = false }) => {
                             )}
 
                             {isChannel ? (
-                                <span className="capitalize">{contact.name}</span>
+                                <span className="capitalize">{contact.channelName}</span>
                             ) : (
                                 <span className="capitalize">{`${contact.firstName} ${contact.lastName}`}</span>
                             )}

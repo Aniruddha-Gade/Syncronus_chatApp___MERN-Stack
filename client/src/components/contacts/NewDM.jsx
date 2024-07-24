@@ -48,7 +48,7 @@ const NewDM = () => {
         }
     }
 
-    console.log("searchedContacts array value = ", searchedContacts)
+    // console.log("searchedContacts array value = ", searchedContacts)
 
     const selectNewContact = (contact) => {
         setOpenNewContactModal(false) // close modal
