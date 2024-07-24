@@ -14,7 +14,7 @@ const ChatHeader = () => {
         <div className="h-[10vh] border-b-2 border-[#2f303b] flex-between px-5">
             <div className="w-full justify-between flex gap-5 items-center ">
                 <div className="flex-center gap-3">
-                    <div className="relative bg-neutral-800 hover:bg-neutral-700 p-2 rounded-md flex gap-5 w-full ">
+                    <div className="relative bg-neutral-800 hover:bg-neutral-700 p-2 rounded-md flex gap-5 ">
                         {selectedChatType === 'contact' ?
                             // for contacts
                             <Avatar className="w-12 h-12 rounded-full overflow-hidden">
