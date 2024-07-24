@@ -4,6 +4,7 @@ import { GET_ALL_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
 import { useEffect, useRef } from "react";
 
+
 const MessageContainer = () => {
   const scrollRef = useRef();
   const { selectedChatType, selectedChatData, selectedChatMessages, token, setselectedChatMessages } = useAppStore();
@@ -37,7 +38,7 @@ const MessageContainer = () => {
         }
       }
     } catch (error) {
-      console.log()
+      console.log('GET_ALL_MESSAGES_ROUTE ERROR => ', error)
     }
   }, [selectedChatData, token, setselectedChatMessages, selectedChatType])
 
@@ -93,7 +94,34 @@ const MessageContainer = () => {
 
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 md:px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
-      {renderMessages()}
+      {
+        // show loading skeleton
+        !selectedChatMessages.length > 0 ? (
+          <div className="flex flex-col h-full gap-5">
+            {/* on the left side */}
+            <div className="flex flex-col gap-5">
+              <div className="h-9 w-2/3 flex items-start justify-start rounded-lg skeleton"></div>
+              <div className="h-9 w-1/3 flex items-start justify-start rounded-lg skeleton"></div>
+            </div>
+
+            {/* on the right side */}
+            <div className="flex flex-col items-end gap-5">
+              <div className="h-9 w-1/3 rounded-lg skeleton"></div>
+              <div className="h-9 w-1/4 rounded-lg skeleton"></div>
+              <div className="h-[200px] w-[200px] md:w-2/5 rounded-lg skeleton"></div>
+            </div>
+
+            <div className="flex flex-col gap-5">
+              <div className="h-9 w-1/3 rounded-lg skeleton"></div>
+            </div>
+
+          </div>
+        ) : (
+          // render actual messages
+          <>{renderMessages()}</>
+        )
+      }
+
       <div ref={scrollRef} />
     </div>
   );
