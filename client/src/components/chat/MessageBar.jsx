@@ -15,6 +15,7 @@ const MessageBar = () => {
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
     const { userInfo, selectedChatData, selectedChatType } = useAppStore()
     const socket = useSocket()
+    const inputRef = useRef()
 
     // console.log({ userInfo, selectedChatData, selectedChatType })
 
@@ -67,6 +68,22 @@ const MessageBar = () => {
     // console.log("emojiPickerOpen = ", emojiPickerOpen)
 
 
+    // if 'Enter' button clicked, then send msg
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
+        }
+    };
+
+
+    // Focus the input field when the chat is opened
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [selectedChatData])
+
+
     return (
         <div className="bg-[#1c1d25] md:h-[10vh] px-4 md:px-8 mb-2 md:mb-4 flex-center gap-2 md:gap-6 ">
             <div className="bg-[#2a2b33] flex flex-1 rounded-md items-center gap-5 pr-5 ">
@@ -75,6 +92,8 @@ const MessageBar = () => {
                     type='text'
                     placeholder="Enter a message"
                     value={message}
+                    ref={inputRef}
+                    onKeyUp={handleKeyPress}
                     onChange={(e) => setMessage(e.target.value)}
                     className="bg-transparent w-[70px] px-3 py-5 md:p-5 flex-1 rounded-md focus:border-none focus:outline-none "
                 />
