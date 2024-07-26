@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { useState } from "react"
+import { toast } from "sonner"
 
 
 const ProfileInfo = () => {
@@ -46,6 +47,7 @@ const ProfileInfo = () => {
         // clear local storage
         localStorage.removeItem("userInfo")
         localStorage.removeItem("token")
+        toast.success("Logout successfully")
       }
 
     } catch (error) {

@@ -251,7 +251,7 @@ export const logout = async (req, res, next) => {
     try {
 
         // clear cookies
-        res.cookie("jwt", "", { maxAge: 1, secure: true, sameSite: 'None' })
+        res.cookie("token", "", { maxAge: 1, secure: true, sameSite: 'None' })
 
         // return success message
         return res.status(200).json({
