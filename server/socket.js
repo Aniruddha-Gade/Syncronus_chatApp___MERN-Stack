@@ -1,6 +1,7 @@
 import dontenv from 'dotenv'
 import { Server as SocketIoServer } from "socket.io";
 import Message from "./models/messageModel.js";
+import Channel from './models/channelModel.js';
 dontenv.config()
 
 const ORIGIN = process.env.ORIGIN
@@ -33,7 +34,7 @@ const setupSocket = (server) => {
     };
 
 
-    // send Message
+    // send Personal Message
     const sendMessage = async (message) => {
         console.log("Actual message = ", message)
         // example of message
@@ -61,8 +62,50 @@ const setupSocket = (server) => {
             console.log("message has received")
             io.to(recipientSocketId).emit('receivedMessage', messageData)
         }
-
     }
+
+
+
+    // send Channel Message
+    const sendChannelMessage = async (message) => {
+        const { sender, channelId, content, messageType, fileUrl } = message
+
+        const createMessage = await Message.create({
+            sender,
+            recipient: null,
+            channelId,
+            content,
+            messageType,
+            fileUrl,
+            timestamp: Date.now()
+        })
+
+        const messageData = await Message.findById(createMessage._id)
+            .populate("sender", "email firstName lastName image color")
+            .exec()
+
+        const channel = await Channel.findByIdAndUpdate(channelId, {
+            $push: { messages: createMessage._id }
+        })
+
+
+        if (channel && channel._id) {
+            const finalMessageData = { ...messageData._doc, channelId: channel._id }
+
+            channel.members.forEach((member) => {
+                const memberSocketId = userSocketMap.get(member._id.toString())
+                if (memberSocketId) {
+                    io.to(memberSocketId).emit("receive-channel-message", finalMessageData)
+                }
+            })
+            // send msg to admin, as he is not in member list
+            const adminSocketId = userSocketMap.get(channel.admin._id.toString())
+            if (adminSocketId) {
+                io.to(adminSocketId).emit("receive-channel-message", finalMessageData)
+            }
+        }
+    }
+
 
 
     io.on("connection", (socket) => {
@@ -76,6 +119,7 @@ const setupSocket = (server) => {
 
         socket.on("disconnect", () => disconnect(socket));
         socket.on("sendMessage", sendMessage)
+        socket.on("send-channel-message", sendChannelMessage)
     });
 };
 

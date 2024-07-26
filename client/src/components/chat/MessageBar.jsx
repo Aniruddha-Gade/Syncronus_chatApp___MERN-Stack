@@ -35,10 +35,19 @@ const MessageBar = () => {
                     messageType: 'text',
                     fileUrl: undefined
                 })
-                setMessage('')
-                console.log("Message sent through socket ")
+            }
+            else if (selectedChatType === 'channel') {
+                socket.emit("send-channel-message", {
+                    sender: userInfo._id,
+                    channelId: selectedChatData._id,
+                    content: message,
+                    messageType: 'text',
+                    fileUrl: undefined
+                })
             }
         }
+        setMessage('')
+        // console.log("Message sent through socket ")
     }
 
     // close emoji picker , if outside click

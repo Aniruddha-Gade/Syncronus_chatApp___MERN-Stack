@@ -1,13 +1,15 @@
 import { apiClient } from "@/lib/api-client";
+import { getColor } from "@/lib/utils";
 import { useAppStore } from "@/store"
 import { GET_ALL_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
 import { useEffect, useRef } from "react";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 
 const MessageContainer = () => {
   const scrollRef = useRef();
-  const { selectedChatType, selectedChatData, selectedChatMessages, token, setselectedChatMessages } = useAppStore();
+  const { selectedChatType, selectedChatData, selectedChatMessages, token, setselectedChatMessages, userInfo } = useAppStore();
 
   // scrol down as new message come 
   useEffect(() => {
@@ -57,9 +59,8 @@ const MessageContainer = () => {
           </div>
           }
 
-          {
-            selectedChatType === 'contact' && renderDMMessages(message)
-          }
+          {selectedChatType === 'contact' && renderDMMessages(message)}
+          {selectedChatType === 'channel' && renderChannelMessages(message)}
         </div>
       );
     });
@@ -69,8 +70,7 @@ const MessageContainer = () => {
   const renderDMMessages = (message) => (
     <div
       className={`flex flex-col
-        ${message.sender === selectedChatData._id ? "items-start" : "items-end"}
-      `}
+        ${message.sender === selectedChatData._id ? "items-start" : "items-end"}`}
     >
       {message.messageType === "text" && (
         <div
@@ -90,6 +90,67 @@ const MessageContainer = () => {
       </div>
     </div>
   );
+
+
+  // render Channel Messages
+  const renderChannelMessages = (message) => (
+
+    <div
+      className={`flex flex-col my-5
+      ${message.sender._id === userInfo._id ? "items-end" : "items-start"}`}
+    >
+      {message.messageType === "text" && (
+        <div
+          className={`
+          ${message.sender._id === userInfo._id
+              ? "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+              : "bg-[#8417ff]/5 text-[#8417ff] border-[#8417ff]/50 ml-8"
+            }
+          border inline-block p-4 rounded my-1 max-w-[50%] break-words
+        `}
+        >
+          {message.content}
+        </div>
+      )}
+
+      {message.sender._id !== userInfo._id ?
+        <div className="flex items-center gap-3 my-1 text-sm capitalize">
+          <Avatar className="w-7 h-7 rounded-full overflow-hidden">
+            {message.sender.image ? <AvatarImage
+              src={message.sender.image}
+              className="bg-black w-full h-full object-cover"
+              alt='profile'
+            />
+              : <div
+                className={`w-7 h-7 text-lg flex-center uppercase font-bold border-[1px] rounded-full 
+                         ${getColor(message.sender.color)}`}
+              >
+                {
+                  message.sender.firstName ? message.sender.firstName.split("").shift()
+                    : message.sender.email.split("").shift()
+                }
+              </div>
+            }
+          </Avatar>
+
+          <p className="text-sm text-white/70">
+            {`${message.sender.firstName} ${message.sender.lastName}`}
+          </p>
+          <div className="text-xs text-white/70">
+            {moment(message.timestamp).format("LT")}
+          </div>
+        </div>
+
+        :
+        <div className="text-xs text-white/70">
+          {moment(message.timestamp).format("LT")}
+        </div>
+      }
+
+
+
+    </div>
+  )
 
 
   return (
