@@ -1,7 +1,7 @@
 import { apiClient } from "@/lib/api-client";
 import { getColor } from "@/lib/utils";
 import { useAppStore } from "@/store"
-import { GET_ALL_MESSAGES_ROUTE } from "@/utils/constants";
+import { GET_ALL_MESSAGES_ROUTE, GET_CHANNELS_MESSAGES_ROUTE } from "@/utils/constants";
 import moment from "moment";
 import { useEffect, useRef } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
@@ -10,17 +10,33 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 const MessageContainer = () => {
   const scrollRef = useRef();
   const { selectedChatType, selectedChatData, selectedChatMessages, token, setselectedChatMessages, userInfo } = useAppStore();
+  const previousMessagesLength = useRef(0);
 
-  // scrol down as new message come 
+
+  // scrol down as new message come
   useEffect(() => {
+    const isInitialLoad = previousMessagesLength.current === 0;
+    const hasNewMessage = selectedChatMessages.length > previousMessagesLength.current;
+
     if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      if (isInitialLoad) {
+        // Jump directly to the last message on initial load
+        scrollRef.current.scrollIntoView({ behavior: "auto" });
+      } else if (hasNewMessage) {
+        // Scroll smoothly to the last message if there are new messages
+        scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     }
+
+    // Update the previous message length to the current message length
+    previousMessagesLength.current = selectedChatMessages.length;
   }, [selectedChatMessages]);
 
 
+  // fetch messages
   useEffect(() => {
     try {
+      // get All personal Messages
       const getAllMessages = async () => {
         const response = await apiClient.post(GET_ALL_MESSAGES_ROUTE,
           { token, recipientId: selectedChatData._id },
@@ -33,10 +49,24 @@ const MessageContainer = () => {
         }
       }
 
+      // get Channels Messages
+      const getChannelsMessages = async () => {
+        const response = await apiClient.post(GET_CHANNELS_MESSAGES_ROUTE,
+          { token, channelId: selectedChatData._id },
+          { withCredentials: true }
+        )
+        console.log("GET_CHANNELS_MESSAGES_ROUTE RESPONSE => ", response)
+        if (response.data.channelMessages) {
+          setselectedChatMessages(response.data.channelMessages)
+        }
+      }
+
 
       if (selectedChatData._id) {
         if (selectedChatType === 'contact') {
           getAllMessages()
+        } else if (selectedChatType === 'channel') {
+          getChannelsMessages()
         }
       }
     } catch (error) {

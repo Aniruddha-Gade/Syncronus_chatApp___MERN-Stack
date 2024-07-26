@@ -24,7 +24,7 @@ const setupSocket = (server) => {
 
     // disconnect
     const disconnect = (socket) => {
-        console.log(`Client Disconnected: ${socket.id}`);
+        // console.log(`Client Disconnected: ${socket.id}`);
         for (const [userId, socketId] of userSocketMap.entries()) {
             if (socketId == socket.id) {
                 userSocketMap.delete(userId);
@@ -55,11 +55,11 @@ const setupSocket = (server) => {
             .populate("recipient", "id email firstName lastName image color")
 
         if (senderSocketId) {
-            console.log(`Message: ${message} is sending to userId : ${message.recipient} `)
+            // console.log(`Message: ${message} is sending to userId : ${message.recipient} `)
             io.to(senderSocketId).emit('receivedMessage', messageData)
         }
         if (recipientSocketId) {
-            console.log("message has received")
+            // console.log("message has received")
             io.to(recipientSocketId).emit('receivedMessage', messageData)
         }
     }

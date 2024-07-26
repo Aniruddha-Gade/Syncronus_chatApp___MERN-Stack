@@ -106,3 +106,66 @@ export const getUserChannels = async (req, res) => {
         });
     }
 };
+
+
+
+
+// ====================== GET MESSAGES CHANNELS ======================
+export const getChannelsMessages = async (req, res) => {
+    try {
+        const { userId } = req;
+        const { channelId } = req.body;
+
+        if (!channelId) {
+            return res.status(404).json({
+                success: false,
+                message: 'Channel ID required'
+            });
+        }
+
+        // Find the channel and populate members
+        const channel = await Channel.findById(channelId).populate('members');
+
+        if (!channel) {
+            return res.status(404).json({
+                success: false,
+                message: 'Channel not found'
+            });
+        }
+
+        // Check if the user is a member or admin of the channel
+        const isMember = channel.members.some(member => member._id.toString() === userId);
+        const isAdmin = channel.admin._id.toString() === userId;
+
+        if (!isMember && !isAdmin) {
+            return res.status(403).json({
+                success: false,
+                message: 'You are not authorized to view this channel'
+            });
+        }
+
+        // Populate the messages with sender details if the user is a member
+        await channel.populate({
+            path: 'messages',
+            populate: {
+                path: 'sender',
+                select: 'email firstName lastName image color'
+            }
+        })
+
+
+        // Return success response
+        return res.status(200).json({
+            channelMessages: channel.messages,
+            success: true,
+            message: 'Channel messages fetched successfully'
+        });
+
+    } catch (error) {
+        console.log("Error while fetching channel messages => ", error);
+        res.status(500).json({
+            message: 'Error while fetching channel messages',
+            error: error.message
+        });
+    }
+};
