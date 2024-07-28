@@ -1,7 +1,7 @@
 import Title from "@/components/common/Title";
 import ProfileInfo from "./ProfileInfo";
 import NewDM from "./NewDM";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api-client";
 import { GET_CONTACTS_FOR_DM_LIST_ROUTE, GET_USER_CHANNELS_ROUTE } from "@/utils/constants";
 import { useAppStore } from "@/store";
@@ -12,10 +12,15 @@ const ContactsContainer = () => {
 
   const { token, directMessagesContacts, setDirectMessagesContacts, channels, setChannels } = useAppStore()
 
+  // loading states
+  const [contactLoading, setContactLoading] = useState(false)
+  const [channelLoading, setChannelLoading] = useState(false)
+
   useEffect(() => {
     // get All Contacts
     try {
       const getAllContacts = async () => {
+        setContactLoading(true)
         const res = await apiClient.post(GET_CONTACTS_FOR_DM_LIST_ROUTE,
           { token, },
           { withCredentials: true }
@@ -24,6 +29,7 @@ const ContactsContainer = () => {
         if (res.data.success) {
           setDirectMessagesContacts(res.data.contacts)
         }
+        setContactLoading(false)
       }
       getAllContacts()
 
@@ -34,6 +40,7 @@ const ContactsContainer = () => {
     // get User Channels
     try {
       const getUserChannels = async () => {
+        setChannelLoading(true)
         const res = await apiClient.get(GET_USER_CHANNELS_ROUTE, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -44,6 +51,7 @@ const ContactsContainer = () => {
         if (res.data.success) {
           setChannels(res.data.channels)
         }
+        setChannelLoading(false)
       }
       getUserChannels()
     } catch (error) {
@@ -51,6 +59,22 @@ const ContactsContainer = () => {
     }
   }, [token, setDirectMessagesContacts, setChannels])
 
+
+  // Contact Loading Skeleton
+  const ContactLoadingSkeleton = () => {
+    return (
+      <div className="flex flex-col gap-3 pl-10 py-2 mt-2 ">
+        <div className="flex items-center gap-5 ">
+          <div className='w-10 h-10 rounded-full skeleton'></div>
+          <div className='w-2/3 h-7 rounded-md skeleton'></div>
+        </div>
+        <div className="flex items-center gap-5 ">
+          <div className='w-10 h-10 rounded-full skeleton'></div>
+          <div className='w-2/3 h-7 rounded-md skeleton'></div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="relative w-full md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] ">
@@ -63,7 +87,10 @@ const ContactsContainer = () => {
           <NewDM />
         </div>
         <div className="overflow-y-auto max-h-[38vh] scrollbar-hidden">
-          <ContactsList contacts={directMessagesContacts} />
+          {
+            contactLoading ? <ContactLoadingSkeleton />
+              : <ContactsList contacts={directMessagesContacts} />
+          }
         </div>
       </div>
 
@@ -73,7 +100,10 @@ const ContactsContainer = () => {
           <CreateChannel />
         </div>
         <div className="overflow-y-auto max-h-[38vh] scrollbar-hidden">
-          <ContactsList contacts={channels} isChannel={true} />
+          {
+            channelLoading ? <ContactLoadingSkeleton />
+              : <ContactsList contacts={channels} isChannel={true} />
+          }
         </div>
       </div>
 

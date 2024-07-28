@@ -22,6 +22,9 @@ const Profile = () => {
   const [image, setImage] = useState('')
   const [selectedColor, setSelectedColor] = useState(userInfo.color ? userInfo.color : 0)
   const [hovered, setHovered] = useState(false)
+  const [updateProfileLoading, setUpdateProfileLoading] = useState(false)
+
+
 
   // validate inputs
   const validateProfile = () => {
@@ -40,10 +43,12 @@ const Profile = () => {
   const saveChanges = async () => {
     if (validateProfile()) {
       try {
+        setUpdateProfileLoading(true)
         const response = await apiClient.post(UPDATE_PROFILE_ROUTE,
           { token, firstName, lastName, image, color: selectedColor },
           { withCredentials: true }
         )
+        setUpdateProfileLoading(false)
         console.log("UPDATE_PROFILE_ROUTE RESPONSE => ", response)
         if (response.data.success && response.data.user) {
           toast.success("Profile updated successfully")
@@ -153,10 +158,11 @@ const Profile = () => {
 
         <div className="w-full">
           <Button
+            disabled={updateProfileLoading}
             onClick={saveChanges}
-            className="h-16 w-full bg-green-700 hover:bg-green-900 rounded-2xl transition-all duration-300"
+            className="h-16 w-full bg-green-700 hover:bg-green-900 rounded-2xl transition-all duration-300 disabled:cursor-wait"
           >
-            Save changes
+            {updateProfileLoading ? 'Saving...!' : 'Save Changes'}
           </Button>
         </div>
       </div>
